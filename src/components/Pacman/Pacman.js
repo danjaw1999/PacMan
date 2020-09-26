@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import "./style.css";
 import { ReactComponent as PacmanSvg } from "./pacman.svg";
 class Pacman extends Component {
+
   state = {
     direction: "right",
     position: {
@@ -9,10 +10,23 @@ class Pacman extends Component {
       left: 0
     }
   };
-
+  constructor(props) {
+      super(props);
+      this.pacmanRef = React.createRef()
+  }
+  componentDidMount(){
+      this.pacmanRef.current.focus();
+  }
+  handleKeyDown = (e) => {
+    console.log(e.keyCode, e.key);
+    
+  }
   render() {
     return (
-      <div className="pacman" style={this.state.position}>
+      <div className="pacman" style={this.state.position} ref={this.pacmanRef}
+      tabIndex="0"
+      onKeyDown={this.handleKeyDown}
+      >
         <PacmanSvg />
       </div>
     );
