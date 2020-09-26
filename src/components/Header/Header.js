@@ -1,14 +1,14 @@
 import React from "react";
-
-function Header({score}) {
-    return (
-        <div>
-            <span>SCORE: {score}</span>
-        </div>
-    )
+import "./style.css";
+function Header({ score }) {
+  return (
+    <header>
+      <span>SCORE: {score}</span>
+    </header>
+  );
 }
 
 Header.defaultProps = {
-    score: 0
+  score: 0
 };
 export default Header;
