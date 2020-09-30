@@ -1,3 +1,3 @@
-import Pacman from "./Pacman";
+import Pacman from './Pacman';
 
 export default Pacman;

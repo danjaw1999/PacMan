@@ -1,15 +1,15 @@
-import React, { useState } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import Header from "./components/Header";
-import Board from "./components/Board";
+import React, { useState } from 'react';
+
+import Header from './components/Header';
+import Board from './components/Board';
+import './App.css';
 
 function App() {
   const [score, setScore] = useState(0);
   return (
     <div className="App">
       <Header score={score} />
-      <Board />
+      <Board setScore={setScore} />
     </div>
   );
 }

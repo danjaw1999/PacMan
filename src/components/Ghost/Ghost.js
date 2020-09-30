@@ -1,96 +1,95 @@
 import React, { Component } from 'react';
 
-import { ReactComponent as PacmanSvg } from './pacman.svg';
+import { ReactComponent as GhostSvg } from './ghost.svg';
 import './style.css';
-class Pacman extends Component {
+class Ghost extends Component {
 
   state = {
-    direction: 'right',
+    direction: 'left',
     position: {
-      top: 0,
-      left: 0
+      top: 50 * 3,
+      left: 50 * 3
     }
   }
 
-  constructor(props) {
-    super(props);
-    this.pacmanRef = React.createRef();
-  }
-
   componentDidMount() {
-    this.pacmanRef.current.focus();
+    this.changeDirectionInterval = setInterval(this.changeDirection, 2000);
+    this.moveInterval = setInterval(this.move, 2000);
   }
 
-  handleKeyDown = (event) => {
+  componentWillUnmount() {
+    clearInterval(this.changeDirectionInterval);
+    clearInterval(this.moveInterval);
+  }
+
+  changeDirection = () => {
+    const arrayOfMovement = ['left', 'up', 'down', 'right'];
+    const movement = Math.floor(Math.random() * 4);
+
+    this.setState({ direction: arrayOfMovement[movement] });
+  }
+
+  move = () => {
+    // TODO: refactor
+
     const currentTop = this.state.position.top;
     const currentLeft = this.state.position.left;
+    const { direction } = this.state;
     const { step, border, size, topScoreBoardHeight } = this.props;
 
-    // 39 ArrowRight
-    // 40 ArrowDown
-    // 37 ArrowLeft
-    // 38 ArrowUp
-    if (event.key === 'ArrowUp') {
+    if (direction === 'up') {
       this.setState({
         position: {
           // top: currentTop - step,
           top: Math.max(currentTop - step, 0),
           left: currentLeft
-        },
-        direction: 'up'
+        }
       });
-    } else if (event.key === 'ArrowRight') {
+    } else if (direction === 'right') {
       this.setState({
         position: {
           top: currentTop,
           // left: currentLeft + step
           left: Math.min(currentLeft + step, window.innerWidth - border - size)
-        },
-        direction: 'right'
+        }
       });
-    } else if (event.key === 'ArrowDown') {
+    } else if (direction === 'down') {
       this.setState({
         position: {
           // top: currentTop + step,
           top: Math.min(currentTop + step, window.innerHeight - border - size - topScoreBoardHeight),
           left: currentLeft
-        },
-        direction: 'down'
+        }
       });
-    } else if (event.key === 'ArrowLeft') {
+    } else if (direction === 'left') {
       this.setState({
         position: {
           top: currentTop,
           // left: currentLeft - step
           left: Math.max(currentLeft - step, 0)
-        },
-        direction: 'left'
+        }
       });
     }
+
   }
 
   render() {
-    const { direction, position } = this.state;
+    const { color } = this.props;
     return (
-      <div
-        ref={this.pacmanRef}
-        className={`pacman pacman-${direction}`}
-        tabIndex="0"
-        onKeyDown={this.handleKeyDown}
-        style={position}
-      >
-        <PacmanSvg />
+      <div style={this.state.position} className="ghost">
+        <GhostSvg className={`ghost-${color}`} />
       </div>
-    );
+    )
   }
 }
 
-Pacman.defaultProps = {
+Ghost.defaultProps = {
+  color: 'pink',
   step: 50, // 50px
-  size: 50, // pacman size: 50x50px
+  size: 50, // ghost size: 50x50px
   // TODO: move to config
   border: 10 * 2,
   topScoreBoardHeight: 50
 }
 
-export default Pacman;
+export default Ghost;
